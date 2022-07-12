@@ -34,6 +34,8 @@ return [
      */
     'headers' => [
         'Content-Type' => 'application/json',
+        'X-App' => env('APP_NAME'),
+        'X-Version' => 1.0
     ],
 
     /*
@@ -56,7 +58,7 @@ return [
      * By default we will verify that the ssl certificate of the destination
      * of the webhook is valid.
      */
-    'verify_ssl' => true,
+    'verify_ssl' => env('WEBHOOK_VERIFY_SSL', false),
 
     /*
      * When set to true, an exception will be thrown when the last attempt fails
