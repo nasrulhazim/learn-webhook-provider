@@ -66,10 +66,10 @@ class User extends Authenticatable
 
         static::created(function(User $model) {
             WebhookCall::create()
-                ->url(url('webhook/handler'))
+                ->url(config('webhook.user.url'))
                 ->payload($model->toArray())
                 ->throwExceptionOnFailure()
-                ->useSecret('sign-using-this-secret')
+                ->useSecret(config('webhook.user.secret'))
                 ->dispatch();
         });
     }
