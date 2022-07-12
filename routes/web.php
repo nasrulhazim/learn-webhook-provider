@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,4 +26,11 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+
+Route::post('webhook/handler', function(Request $request) {
+    logger()->info([
+        'payload' => $request->all(),
+        'headers' => $request->headers,
+    ]);
 });

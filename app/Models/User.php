@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\WebhookServer\WebhookCall;
 
 class User extends Authenticatable
 {
@@ -58,4 +59,18 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public static function boot() {
+
+        parent::boot();
+
+        static::created(function(User $model) {
+            WebhookCall::create()
+                ->url(url('webhook/handler'))
+                ->payload($model->toArray())
+                ->throwExceptionOnFailure()
+                ->useSecret('sign-using-this-secret')
+                ->dispatch();
+        });
+    }
 }
